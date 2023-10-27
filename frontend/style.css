@@ -1,0 +1,35 @@
+#container{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+  #board {
+    width: 600px;  /* Increase grid size */
+    height: 600px;  /* Increase grid size */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* Make 3 equal columns */
+  }
+  
+  .cell {
+    width: 190px;  /* Take full available space */
+    height: 190px;  /* Take full available space */
+    box-sizing: border-box;  /* Include padding and border in the size */
+    border: 3px solid black;  /* Increase border thickness */
+    text-align: center;
+    vertical-align: middle;
+    font-size: 48px;  /* Increase font size */
+    cursor: pointer;  /* Optional: Add hand cursor on hover */
+  }
+
+#newGameButton {
+  display: none;  /* Initially hidden */
+  margin: 20px auto;  /* Centered horizontally with some vertical margin */
+  padding: 10px 20px;  /* Padding around the text */
+  font-size: 18px;  /* Font size */
+  border: none;  /* Remove default border */
+  cursor: pointer;  /* Hand cursor on hover */
+  border-radius: 4px;  /* Rounded corners */
+}
+  
