@@ -1,15 +1,18 @@
 // Initialize the current player as 'X'
 let currentPlayer = "X";
+let gameActive = true;
 
 // Function to handle the click event on a cell
 function handleCellClick(cell) {
     // Attach a click event listener to the cell
     cell.addEventListener("click", function () {
         // Only proceed if the cell is empty
-        if (this.innerHTML === "") {
+        if (this.innerHTML === "" && gameActive) {
             // Place the current player's symbol ('X' or 'O') in the cell
             this.innerHTML = currentPlayer;
             if (checkForWin()) {
+                // Set board unclickable
+                gameActive = false;
                 // Hide the New Game button again
                 document.getElementById('newGameButton').style.display = 'none';
                 // Show the New Game button
@@ -29,6 +32,7 @@ function handleCellClick(cell) {
 function clearBoard() {
     const cells = document.querySelectorAll(".cell");
     cells.forEach(cell => cell.innerHTML = "");
+    gameActive = true; // allow the board to be clicked again
 }
 
 // Function to check for a win or a tie
