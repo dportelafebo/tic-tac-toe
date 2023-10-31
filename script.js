@@ -17,6 +17,7 @@ function handleCellClick(cell) {
                 document.getElementById('newGameButton').style.display = 'none';
                 // Show the New Game button
                 document.getElementById('newGameButton').style.display = 'block';
+                console.log(`${currentPlayer} won`);
             }
 
             // Check for win or tie
@@ -39,7 +40,7 @@ function clearBoard() {
 function checkForWin() {
     // Get all cells
     const cells = Array.from(document.querySelectorAll(".cell"));
-    
+
     // Define the winning combinations
     const winningCombination = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontal
@@ -50,7 +51,6 @@ function checkForWin() {
     // Check for a win
     for (let [a, b, c] of winningCombination) {
         if (cells[a].innerHTML && cells[a].innerHTML === cells[b].innerHTML && cells[a].innerHTML === cells[c].innerHTML) {
-            console.log(`${currentPlayer} won`);
             return true;
         }
     }
