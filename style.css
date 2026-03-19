@@ -1,35 +1,304 @@
-#container{
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0f1117;
+  color: #e0e0e0;
+  min-height: 100vh;
+  display: flex;
   justify-content: center;
-  align-items: center;
+  padding: 24px 16px 40px;
+}
+
+/* ── App shell ── */
+#app {
+  width: 100%;
+  max-width: 960px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+/* ── Two-column layout ── */
+#main {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* ── LEFT: board panel ── */
+#left-panel {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 14px;
 }
 
-  #board {
-    width: 600px;  /* Increase grid size */
-    height: 600px;  /* Increase grid size */
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);  /* Make 3 equal columns */
-  }
-  
-  .cell {
-    width: 190px;  /* Take full available space */
-    height: 190px;  /* Take full available space */
-    box-sizing: border-box;  /* Include padding and border in the size */
-    border: 3px solid black;  /* Increase border thickness */
-    text-align: center;
-    vertical-align: middle;
-    font-size: 46px;  /* Increase font size */
-    cursor: pointer;  /* Optional: Add hand cursor on hover */
-  }
+#board-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 2px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 288px;
+  height: 288px;
+}
+
+.cell {
+  width: 96px;
+  height: 96px;
+  border: none;
+  border-right: 1px solid #333;
+  border-bottom: 1px solid #333;
+  background: #1a1d27;
+  color: #fff;
+  font-size: 2.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.08s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell:nth-child(3n)   { border-right: none; }
+.cell:nth-child(n+7)  { border-bottom: none; }
+
+.cell:hover:not(:disabled):not([style*="background"]) {
+  background: #252836;
+}
+
+.cell:active:not(:disabled) { transform: scale(0.94); }
+
+.cell:disabled { cursor: default; }
+
+/* Winning cells */
+.cell.win-cell {
+  background: rgba(76, 175, 80, 0.25) !important;
+  color: #81c784;
+}
+
+/* ── Heatmap legend ── */
+#heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  color: #777;
+}
+
+#legend-gradient {
+  width: 100px;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to right, rgb(240,80,80), rgb(245,245,245), rgb(80,190,100));
+}
+
+.legend-label { white-space: nowrap; }
+
+/* ── Status & buttons ── */
+#status {
+  font-size: 1rem;
+  color: #bbb;
+  text-align: center;
+  min-height: 1.4em;
+}
+
+#board-buttons {
+  display: flex;
+  justify-content: center;
+}
 
 #newGameButton {
-  display: none;  /* Initially hidden */
-  margin: 20px auto;  /* Centered horizontally with some vertical margin */
-  padding: 10px 20px;  /* Padding around the text */
-  font-size: 18px;  /* Font size */
-  border: none;  /* Remove default border */
-  cursor: pointer;  /* Hand cursor on hover */
-  border-radius: 4px;  /* Rounded corners */
+  padding: 9px 28px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
-  
+#newGameButton:hover { background: #43a047; }
+
+/* ── RIGHT: stats + controls ── */
+#right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Chart section ── */
+#chart-section {
+  background: #1a1d27;
+  border: 1px solid #2a2d3a;
+  border-radius: 10px;
+  padding: 16px 18px 12px;
+}
+
+#chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+#chart-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+#game-counter {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+#chart-wrap {
+  position: relative;
+  height: 180px;
+}
+
+#stat-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 0.78rem;
+}
+
+.stat { color: #777; }
+.cpu-stat { color: #4caf50; }
+.rng-stat { color: #ef5350; }
+.tie-stat { color: #888; }
+.pct-stat { color: #90caf9; font-weight: 600; }
+
+/* ── Train section ── */
+#train-section {
+  background: #1a1d27;
+  border: 1px solid #2a2d3a;
+  border-radius: 10px;
+  padding: 18px;
+}
+
+#train-section h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #ccc;
+}
+
+.hint {
+  font-size: 0.78rem;
+  color: #666;
+  margin-bottom: 14px;
+}
+
+#train-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#batch-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.batch-btn {
+  flex: 1;
+  min-width: 52px;
+  padding: 8px 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  background: #252836;
+  color: #ccc;
+  border: 1px solid #353848;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.batch-btn:hover:not(:disabled) { background: #2e3145; color: #fff; }
+.batch-btn:disabled { opacity: 0.4; cursor: default; }
+
+#speed-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+#speedSlider {
+  flex: 1;
+  accent-color: #4caf50;
+}
+
+.speed-label { min-width: 34px; text-align: center; font-size: 0.75rem; }
+
+#stopBtn {
+  padding: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  background: transparent;
+  color: #ef5350;
+  border: 1px solid #ef5350;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+#stopBtn:hover:not(:disabled) { background: rgba(239,83,80,0.1); }
+#stopBtn:disabled { opacity: 0.3; cursor: default; }
+
+/* ── Progress bar ── */
+#progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+#progress-bar {
+  flex: 1;
+  height: 6px;
+  background: #252836;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+#progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #388e3c, #66bb6a);
+  border-radius: 3px;
+  transition: width 0.15s ease;
+}
+
+#progress-label {
+  font-size: 0.75rem;
+  color: #666;
+  min-width: 48px;
+  text-align: right;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  #main { grid-template-columns: 1fr; justify-items: center; }
+  #right-panel { width: 100%; max-width: 400px; }
+}
