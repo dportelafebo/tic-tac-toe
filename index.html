@@ -3,29 +3,98 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tic-Tac-Toe</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <!-- Link to external CSS file -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <title>Tic-Tac-Toe AI</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <script src="script.js" defer></script>
   </head>
   <body>
-    <div id="container">
-      <h1 style="text-align: center; padding: 20px">Tic Tac Toe</h1>
-      <p id="status" style="text-align: center; font-size: 22px; min-height: 1.5em;"></p>
-      <div id="board">
-        <button class="cell"></button>
-        <button class="cell"></button>
-        <button class="cell"></button>
-        <button class="cell"></button>
-        <button class="cell"></button>
-        <button class="cell"></button>
-        <button class="cell"></button>
-        <button class="cell"></button>
-        <button class="cell"></button>
+    <div id="app">
+      <h1>Tic-Tac-Toe AI</h1>
+
+      <div id="main">
+
+        <!-- ── LEFT: board ── -->
+        <div id="left-panel">
+          <div id="board-wrap">
+            <div id="board">
+              <button class="cell" data-idx="0"></button>
+              <button class="cell" data-idx="1"></button>
+              <button class="cell" data-idx="2"></button>
+              <button class="cell" data-idx="3"></button>
+              <button class="cell" data-idx="4"></button>
+              <button class="cell" data-idx="5"></button>
+              <button class="cell" data-idx="6"></button>
+              <button class="cell" data-idx="7"></button>
+              <button class="cell" data-idx="8"></button>
+            </div>
+            <!-- heatmap legend -->
+            <div id="heatmap-legend">
+              <span class="legend-label">AI avoids</span>
+              <div id="legend-gradient"></div>
+              <span class="legend-label">AI prefers</span>
+            </div>
+          </div>
+
+          <p id="status">Press Train or play a game!</p>
+
+          <div id="board-buttons">
+            <button id="newGameButton" style="display:none">New Game</button>
+          </div>
+        </div>
+
+        <!-- ── RIGHT: stats + controls ── -->
+        <div id="right-panel">
+
+          <!-- Win rate chart -->
+          <div id="chart-section">
+            <div id="chart-header">
+              <span id="chart-title">CPU Win Rate</span>
+              <span id="game-counter">0 games</span>
+            </div>
+            <div id="chart-wrap">
+              <canvas id="winChart"></canvas>
+            </div>
+            <div id="stat-bar">
+              <span class="stat cpu-stat">CPU <span id="stat-cpu">0</span>W</span>
+              <span class="stat tie-stat">Tie <span id="stat-tie">0</span></span>
+              <span class="stat rng-stat">Random <span id="stat-rng">0</span>W</span>
+              <span class="stat pct-stat">Last 20: <span id="stat-pct">—</span></span>
+            </div>
+          </div>
+
+          <!-- Auto-train controls -->
+          <div id="train-section">
+            <h2>Auto-Train</h2>
+            <p class="hint">Watch the AI learn by playing against a random opponent.</p>
+
+            <div id="train-controls">
+              <div id="batch-buttons">
+                <button class="batch-btn" data-n="20">+20</button>
+                <button class="batch-btn" data-n="50">+50</button>
+                <button class="batch-btn" data-n="100">+100</button>
+                <button class="batch-btn" data-n="500">+500</button>
+              </div>
+
+              <div id="speed-row">
+                <label for="speedSlider">Speed</label>
+                <span class="speed-label">Fast</span>
+                <input type="range" id="speedSlider" min="0" max="600" value="0" step="50" />
+                <span class="speed-label">Slow</span>
+              </div>
+
+              <button id="stopBtn" disabled>Stop</button>
+            </div>
+
+            <div id="progress-wrap">
+              <div id="progress-bar"><div id="progress-fill"></div></div>
+              <span id="progress-label"></span>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
-    <button id="newGameButton">New Game</button>
-    <!-- New Game button -->
   </body>
 </html>
